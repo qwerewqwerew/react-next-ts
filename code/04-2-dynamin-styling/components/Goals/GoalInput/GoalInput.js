@@ -1,0 +1,33 @@
+import React, { useState } from 'react';
+
+import Button from '../../UI/Button/Button';
+import styles from './GoalInput.module.css';
+
+
+
+const Input = props => {
+  const [enteredValue, setEnteredValue] = useState('');
+  const [isValid, setIsValid] = useState(true)
+  const goalInputChangeFn = event => {
+    if (enteredValue.trim().length > 0) { setIsValid(true) }
+    setEnteredValue(event.target.value);
+  };
+
+  const formSubmitFn = event => {
+    event.preventDefault();
+    if (enteredValue.trim().length === 0) { setIsValid(false); return; }
+    props.onAddGoal(enteredValue);
+  };
+
+  return (
+    <form onSubmit={formSubmitFn}>
+      <div className={`${styles.form_control} ${!isValid && styles.invalid}`}>
+        <label> 목표달성앱</label>
+        <input type="text" onChange={goalInputChangeFn} />
+      </div>
+      <Button type="submit">목표등록</Button>
+    </form>
+  );
+};
+
+export default Input;

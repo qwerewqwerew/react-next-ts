@@ -1,0 +1,70 @@
+import React, { useState } from 'react';
+import styled from "styled-components";
+
+import Button from '../../UI/Button/Button';
+import './GoalInput.css';
+
+
+const FormControl = styled.div`
+  margin: 0.5rem 0;
+
+  & label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: ${props => (props.invalid ? 'red' : 'black')};
+  }
+
+  & input {
+    display: block;
+    width: 100%;
+    border: 1px solid ${props => (props.invalid ? 'red' : '#ccc')};
+    background: ${props => (props.invalid ? '#ffd7d7' : 'transparent')};
+    font: inherit;
+    line-height: 1.5rem;
+    padding: 0 0.25rem;
+  }
+
+
+& input:focus {
+  outline: none;
+  background: #dce3ee;
+  border-color: #4171b9;
+}
+&.invalid input {
+  border-color: red;
+  border-style: dashed;
+  border-width: 2px;
+}
+&.invalid label {
+  color: red;
+}
+`
+
+const Input = props => {
+  const [enteredValue, setEnteredValue] = useState('');
+  const [isValid, setIsValid] = useState(true)
+  const goalInputChangeFn = event => {
+    if (enteredValue.trim().length > 0) { setIsValid(true) }
+    setEnteredValue(event.target.value);
+  };
+
+  const formSubmitFn = event => {
+    event.preventDefault();
+    if (enteredValue.trim().length === 0) { setIsValid(false); return; }
+    props.onAddGoal(enteredValue);
+  };
+
+  return (
+    <form onSubmit={formSubmitFn}>
+      {/* <FormControl className={!isValid && "invalid"}> */}
+      <FormControl invalid={!isValid}>
+        <label> 목표달성앱</label>
+        <input type="text" onChange={goalInputChangeFn} />
+      </FormControl>
+      <Button type="submit">목표등록</Button>
+    </form>
+  );
+};
+
+export default Input;
